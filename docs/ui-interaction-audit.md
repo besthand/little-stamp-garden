@@ -33,3 +33,9 @@ The collection rail is sticky within the sheet row and scrolls vertically. Card 
 ## Follow-up flow simplification
 
 The home screen now has only the stamp action; all six stamp choices remain in the protected stamp dialog. The quantity control groups minus, amount/unit and plus in a centered capsule. History summary labels and values are centered in all three panels. Reward creation is available through the parent helper only, including when the reward list or a filtered mode is empty. Child reward pages keep the three rules, filter counts, viewing, editing authorization and redemption, but omit the redundant goals toolbar and creation buttons.
+
+## Parent numeric keypad
+
+Parent unlock, initial PIN setup, PIN changes and the parent PIN in an imported backup use a masked, read-only PIN display and a 3×4 on-screen keypad. The active field is explicit for setup/confirmation; digits never auto-submit. Backspace deletes one digit, clear deletes the active field, and lengths remain 8 digits for setup/change or 32 for padded verification. Desktop number keys, Backspace and Delete are supported, while ordinary backup-password fields are not intercepted. Confirm is disabled until required PIN fields contain at least four digits; the unlock handler additionally validates length/format before counting a failed attempt. Existing PIN hashing, substring verification, lockouts and save checks are unchanged.
+
+Automated tests cover leading zeros, limits, field switching, masked length feedback, clear/delete, no automatic mutation and padded-password verification. Real mobile/device keyboard and touch verification remains pending because the required browser tool is unavailable.
