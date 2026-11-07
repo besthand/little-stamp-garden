@@ -29,3 +29,7 @@ No required cua_repl/browser-control tool is available in this environment. This
 ## Follow-up card review
 
 The collection rail is sticky within the sheet row and scrolls vertically. Card selection preserves the page viewport and updates only the rail's scrollTop when needed. Previous/next controls and the inline palette retain accessible labels despite having no visible text. Five grid columns are preserved on all phone breakpoints; stamp-circle artwork stays circular within the touch target. Filled circles keep their accessible point number and detail action, but do not render a visible number overlay.
+
+## Follow-up flow simplification
+
+The home screen now has only the stamp action; all six stamp choices remain in the protected stamp dialog. The quantity control groups minus, amount/unit and plus in a centered capsule. History summary labels and values are centered in all three panels. Reward creation is available through the parent helper only, including when the reward list or a filtered mode is empty. Child reward pages keep the three rules, filter counts, viewing, editing authorization and redemption, but omit the redundant goals toolbar and creation buttons.
