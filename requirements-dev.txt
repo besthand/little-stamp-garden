@@ -1,0 +1,2 @@
+# Optional: regenerate the original raster illustration and collection assets.
+Pillow>=10.0,<14.0
