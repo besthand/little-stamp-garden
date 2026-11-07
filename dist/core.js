@@ -13,6 +13,27 @@ export const themes = [
 {id:'peach',name:'甜甜花園',color:'#ba7f83',light:'#fbefec',emoji:'🌷',caption:'把小小努力，種成漂亮的花。'}];
 export function balance(state,id){return state.events.filter(e=>e.childId===id).reduce((s,e)=>s+e.delta,0)}
 export function earned(state,id){return state.events.filter(e=>e.childId===id && e.kind==='earn').reduce((s,e)=>s+e.delta,0)}
+// Reconstruct available stamps from the existing ledger, without allocating every point.
+// Point deductions consume the oldest available stamps; records themselves remain unchanged.
+export function stampCardView(state,childId,requestedPage=null){
+ const batches=[];let head=0,total=0;
+ for(const event of state.events){
+  if(event.childId!==childId)continue;
+  if(event.kind==='earn'){batches.push({event,count:event.delta});total+=event.delta;}
+  else if(event.delta<0){let remaining=-event.delta;total-=remaining;
+   while(remaining&&head<batches.length){const batch=batches[head],used=Math.min(remaining,batch.count);batch.count-=used;remaining-=used;if(!batch.count)head++;}
+  }
+ }
+ const pageCount=Math.max(1,Math.ceil(total/20));
+ const page=Number.isInteger(requestedPage)?Math.min(pageCount-1,Math.max(0,requestedPage)):pageCount-1;
+ const offset=page*20,points=[];let skip=offset;
+ for(let i=head;i<batches.length&&points.length<20;i++){
+  const batch=batches[i];if(skip>=batch.count){skip-=batch.count;continue;}
+  const count=Math.min(20-points.length,batch.count-skip);skip=0;
+  for(let j=0;j<count;j++)points.push({eventId:batch.event.id,stamp:batch.event.stamp,reason:batch.event.reason,at:batch.event.at});
+ }
+ return {total,pageCount,page,offset,points};
+}
 export function eligibility(state,childId,r){
  const redeems=state.events.filter(e=>e.childId===childId&&e.rewardId===r.id&&e.kind==='redeem');
  if(r.rule==='milestone') return {ready:earned(state,childId)>=r.cost&&!redeems.length,current:earned(state,childId),claimed:!!redeems.length};
